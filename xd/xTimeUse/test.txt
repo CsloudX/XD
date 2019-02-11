@@ -1,0 +1,9 @@
+Visual Leak Detector Version 2.5.1 installed.
+X_TIME_USE: main: BEGIN
+X_TIME_USE: 	fff: BEGIN
+X_TIME_USE: 	fff: LED	500ms
+Visual Leak Detector is now exiting.
+X_TIME_USE: 	fff: END	1002ms
+X_TIME_USE: main: LED	1512ms
+X_TIME_USE: main: END	2013ms
+No memory leaks detected.

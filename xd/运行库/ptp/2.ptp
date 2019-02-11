@@ -1,0 +1,5 @@
+<print_template size="500,400" style="0" color="0,0,0,255">
+	<item id="ID1" pos="74,35" size="100,30" type="text">
+		<text text="Text"></text>
+	</item>
+</print_template>

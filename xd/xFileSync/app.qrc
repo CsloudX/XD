@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/left.png</file>
+        <file>res/right.png</file>
+        <file>res/stop.png</file>
+        <file>res/compare.png</file>
+        <file>res/sync.png</file>
+        <file>res/open_dir.png</file>
+        <file>res/add.png</file>
+        <file>res/save.png</file>
+        <file>res/del.png</file>
+        <file>res/no_op.png</file>
+    </qresource>
+</RCC>
