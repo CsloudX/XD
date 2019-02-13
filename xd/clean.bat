@@ -12,6 +12,7 @@ for /f "tokens=*" %%i in ('dir /ad /b *') do (
 
 del bin\*.ilk
 del bin\*.exp
+del bin\*d.*
 CALL:X_DEL_DIR bin\log
 
 

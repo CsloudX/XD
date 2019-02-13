@@ -5,13 +5,32 @@
 #include <vector>
 #include <list>
 
-class XSort
+class XSortAlgorithm
+{
+protected:
+	template<typename It>
+	static void swap(It a, It b)
+	{
+		std::_Iter_value_t<It> t = *a;
+		*a = *b;
+		*b = t;
+	}
+};
+
+class XInsertSort : public XSortAlgorithm
 {
 public:
-	template<typename It>
-	static void insertSort(It begin, It end) { insertSort(begin, end, std::less<>()); }
 	template<typename It, typename Al>
-	static void insertSort(It begin, It end, Al al)
+	XInsertSort(It begin, It end, Al al) { (*this)(begin, end, al); }
+
+	template<typename It>
+	XInsertSort(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It>
+	void operator()(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It, typename Al>
+	void operator()(It begin, It end, Al al)
 	{
 		for (It itr = begin; itr != end; ++itr)
 		{
@@ -31,11 +50,22 @@ public:
 			*itr2 = m;
 		}
 	}
+};
+
+class XMergeSort : public XSortAlgorithm
+{
+public:
+	template<typename It, typename Al>
+	XMergeSort(It begin, It end, Al al) { (*this)(begin, end, al); }
 
 	template<typename It>
-	static void mergeSort(It begin, It end) { mergeSort(begin, end, std::less<>()); }
+	XMergeSort(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It>
+	void operator()(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
 	template<typename It, typename Al>
-	static void mergeSort(It begin, It end, Al al)
+	void operator()(It begin, It end, Al al)
 	{
 		int count = end - begin;
 		if (count <= 1) {
@@ -43,25 +73,14 @@ public:
 		}
 
 		It mid = begin + count / 2;
-		mergeSort(begin, mid, al);
-		mergeSort(mid, end, al);
+		(*this)(begin, mid, al);
+		(*this)(mid, end, al);
 		merge(begin, mid, end, al);
 	}
 
-	template<typename It>
-	static void heapSort(It begin, It end) { heapSort(begin, end, std::less<>()); }
-	template<typename It, typename Al>
-	static void heapSort(It begin, It end, Al al){}
-
-	template<typename It>
-	static void quickSort(It begin, It end) { quickSort(begin, end, std::less<>()); }
-	template<typename It, typename Al>
-	static void quickSort(It begin, It end, Al al) {}
-
-
 private:
 	template<typename It, typename Al>
-	static void merge(It begin,It mid, It end, Al al)
+	static void merge(It begin, It mid, It end, Al al)
 	{
 		std::list<std::_Iter_value_t<It> > arr1 = toList(begin, mid);
 		std::list<std::_Iter_value_t<It> > arr2 = toList(mid, end);
@@ -100,6 +119,69 @@ private:
 	}
 };
 
+class XHeapSort : public XSortAlgorithm
+{
+public:
+	template<typename It, typename Al>
+	XHeapSort(It begin, It end, Al al) { (*this)(begin, end, al); }
+
+	template<typename It>
+	XHeapSort(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It>
+	void operator()(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It, typename Al>
+	void operator()(It begin, It end, Al al)
+	{
+		
+	}
+};
+
+class XQuickSort: public XSortAlgorithm
+{
+public:
+	template<typename It,typename Al>
+	XQuickSort(It begin, It end, Al al) { (*this)(begin, end, al); }
+
+	template<typename It>
+	XQuickSort(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It>
+	void operator()(It begin, It end) { (*this)(begin, end, std::less<>()); }
+
+	template<typename It, typename Al>
+	void operator()(It begin, It end, Al al)
+	{
+		if (begin < end) {
+			It mid = partition(begin, end, al);
+			(*this)(begin, mid, al);
+			(*this)(mid + 1, end, al);
+		}
+	}
+private:
+	template<typename It, typename Al>
+	static It partition(It begin, It end, Al al)
+	{
+		It jEnd = end - 1;
+		std::_Iter_value_t<It> x = *jEnd;
+		It i = begin;
+		for (; i < jEnd; ++i) {
+			if (!al(*i, x)) {
+				break;
+			}
+		}
+		It j = i + 1;
+		for (; j < jEnd; ++j) {
+			if (al(*j, x)) {
+				swap(i, j);
+				++i;
+			}
+		}
+		swap(i, jEnd);
+		return i;
+	}
+};
 
 
 class XSortTest : public XUnitTest
@@ -112,10 +194,10 @@ protected:
 
 #define _TEST_SORT(al) {std::vector<int> vec=arr;al(vec.begin(),vec.end());X_VERIFY2(vec==dst,#al);}
 
-		_TEST_SORT(XSort::insertSort);
-		_TEST_SORT(XSort::mergeSort);
-		_TEST_SORT(XSort::heapSort);
-		_TEST_SORT(XSort::quickSort);
+		_TEST_SORT(XInsertSort);
+		_TEST_SORT(XMergeSort);
+		_TEST_SORT(XHeapSort);
+		_TEST_SORT(XQuickSort);
 
 #undef _TEST_SORT
 	}

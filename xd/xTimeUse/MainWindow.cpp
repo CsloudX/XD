@@ -1,15 +1,39 @@
 #include "MainWindow.h"
 #include <QFile>
+#include <QFileDialog>
 #include <QMessageBox>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QCompleter>
+#include <QFileSystemModel>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	connect(ui.lineEdit_PathFile, SIGNAL(editingFinished()), this, SLOT(parse()));
+	setAcceptDrops(true);
 
-	ui.lineEdit_PathFile->setText("test.txt");
-	parse();
+	QCompleter* completer = new QCompleter(this);
+	QFileSystemModel* model = new QFileSystemModel(completer);
+	model->setRootPath("");
+	completer->setModel(model);
+	ui.lineEdit_PathFile->setCompleter(completer);
+
+	connect(ui.toolButton, SIGNAL(clicked()), this, SLOT(selectFile()));
+	connect(ui.lineEdit_PathFile, SIGNAL(editingFinished()), this, SLOT(parse()));
+	ui.treeWidget->setColumnWidth(0, width() / 2);
+}
+
+
+void MainWindow::selectFile()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Select Log"),
+		ui.lineEdit_PathFile->text(), tr("Text files (*.txt *.log);;All files (*.*)"));
+	if (!fileName.isEmpty())
+	{
+		ui.lineEdit_PathFile->setText(fileName);
+		parse();
+	}
 }
 
 void MainWindow::parse()
@@ -20,7 +44,7 @@ void MainWindow::parse()
 
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		QMessageBox::warning(this, tr("Warning"), file.errorString());
+		statusBar()->showMessage(file.errorString());
 		return;
 	}
 
@@ -64,4 +88,19 @@ void MainWindow::setNode(QTreeWidgetItem* item, XTimeUseNode* node)
 		QTreeWidgetItem* childItem = new QTreeWidgetItem(item);
 		setNode(childItem, child);
 	}
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+	event->accept();
+}
+
+void MainWindow::dropEvent(QDropEvent* event)
+{
+	QList<QUrl> urls = event->mimeData()->urls();
+	if (urls.isEmpty())
+		return;
+
+	ui.lineEdit_PathFile->setText(urls.first().toLocalFile());
+	parse();
 }

@@ -1,0 +1,3 @@
+MainWindow.qrc|"C:\_E_\_proj\xd\xTimeUse\MainWindow.qrc" -o ".\GeneratedFiles\qrc_MainWindow.cpp" --name MainWindow
+MainWindow.ui|"C:\_E_\_proj\xd\xTimeUse\MainWindow.ui" -o ".\GeneratedFiles\ui_MainWindow.h"
+MainWindow.h|"C:\_E_\_proj\xd\xTimeUse\MainWindow.h" -o ".\GeneratedFiles\Debug\moc_MainWindow.cpp" "-I.\GeneratedFiles" "-I." "-IC:\Qt\Qt5.9.7\5.9.7\msvc2015_64\include" "-I.\GeneratedFiles\Debug" "-IC:\Qt\Qt5.9.7\5.9.7\msvc2015_64\include\QtCore" "-IC:\Qt\Qt5.9.7\5.9.7\msvc2015_64\include\QtGui" "-IC:\Qt\Qt5.9.7\5.9.7\msvc2015_64\include\QtANGLE" "-IC:\Qt\Qt5.9.7\5.9.7\msvc2015_64\include\QtWidgets" -DUNICODE -D_UNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
